@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional
 @UseCase
 @Transactional
 class SendMoneyService: SendMoneyUseCase {
-    override fun sendMoney(command: SendMoneyCommand): Boolean {
-        TODO("Not yet implemented $command")
+    override fun sendMoney(command: SendMoneyCommand): String {
+        with (command) {
+            return "$amount from $sourceAccountId to $targetAccountId"
+        }
     }
 }

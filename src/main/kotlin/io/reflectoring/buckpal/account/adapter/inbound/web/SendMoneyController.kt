@@ -15,15 +15,11 @@ internal class SendMoneyController(val sendMoneyUseCase: SendMoneyUseCase) {
     fun sendMoney(
         @PathVariable("sourceAccountId") sourceAccountId: Long?,
         @PathVariable("targetAccountId") targetAccountId: Long?,
-        @PathVariable("amount") amount: Long?
-    ) {
-        if (sourceAccountId != null && targetAccountId != null && amount != null) {
-            val command = SendMoneyCommand(
-                sourceAccountId,
-                targetAccountId,
-                amount.toBigInteger()
-            )
-            sendMoneyUseCase.sendMoney(command)
-        }
+        @PathVariable("amount") amount: Long
+    ): String {
+        SendMoneyCommand.of(sourceAccountId, targetAccountId, amount.toBigInteger())
+            .fold({ throw UnsupportedOperationException(it.joinToString(", ")) }) {
+                return sendMoneyUseCase.sendMoney(it)
+            }
     }
 }
